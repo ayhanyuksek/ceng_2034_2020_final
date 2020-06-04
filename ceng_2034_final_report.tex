@@ -1,0 +1,176 @@
+\documentclass[onecolumn]{article}
+%\usepackage{url}
+%\usepackage{algorithmic}
+\usepackage[a4paper]{geometry}
+\usepackage{datetime}
+\usepackage[margin=2em, font=small,labelfont=it]{caption}
+\usepackage{graphicx}
+\usepackage{mathpazo} % use palatino
+\usepackage[scaled]{helvet} % helvetica
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{subfigure}
+% Letterspacing macros
+\newcommand{\spacecaps}[1]{\textls[200]{\MakeUppercase{#1}}}
+\newcommand{\spacesc}[1]{\textls[50]{\textsc{\MakeLowercase{#1}}}}
+
+\usepackage{epsfig}
+
+\title{\spacecaps{Implementation of Fork And Multiprocessing Synchronization}\\ 
+\normalsize \spacesc{CENG2034, Operating Systems} }
+
+\author{Ayhan YÜKSEK\\ayhanyuksek@posta.mu.edu.tr\\}
+%\date{\today\\\currenttime}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+The purpose of this homework is to learn how to write the codes that we can write in linux or windows terminal in python scripts and use fork() method. I used the os,uuid,requests,hashlib and multiprocessing libraries to this homework. I have experienced what multitasking is used for thanks to this assignment. In addition, I experienced creating child process and getting rid of orphan status
+\end{abstract}
+
+\section{Introduction}
+In this assignment, we created a python script. Just like midterm homework. The task of this script is that we take the addresses from our address list and download the .jpeg files in them to our computer. It also allows them to be detected if more than one of our downloaded files has landed. First of all, we ran this script we created normally and then ran it using the multiprocessing method. The purpose of these trials was to see in which case the script would run and complete faster.
+\section{Assignments}
+In this assignment, 4 different tasks were requested from us.These tasks are:\newline\newline
+1-) Create a new child process with syscall and print its PID.\newline\newline
+    -- \emph{First of all, I import python os library to write this function. And using this library I wrote the following code:}\bigbreak
+             \includegraphics[scale= .85]{fork.png}\newline\newline\newline\newline
+2-) With the child process, download the files via the given URL list. \newline\newline
+    --\emph{ We did this task using python's requests library and wrote the code below:} \bigbreak
+             \includegraphics[scale= .75]{requests.png}\newline\newline
+             3-) How can you avoid the orphan process situation with syscall?\newline
+
+--\emph{The orphan process state is when the parent ends before the child. To avoid this situation, we can use the os.wait() command:}\bigbreak
+            \includegraphics[scale=1]{orphan.png}\newline\newline
+            4-) Control duplicate files within the downloaded files of your python code.\bigbreak
+
+--\emph{In this task, we need to check the content of the downloaded files. We can use -md5/sha256- for this. We used the md5 method. We got the hash codes of the files we downloaded and checked the duplitace status.}\bigbreak
+            \includegraphics[scale=1]{duplicate.png}
+            \bigbreak
+            \bigbreak
+            \bigbreak\bigbreak\bigbreak\bigbreak\bigbreak\bigbreak
+\section{Results}
+
+
+
+
+
+ As seen in figure 1, first of all, we have done our download tasks as it is called in our Child process. Meanwhile, in figure 2, our parent process was put on hold with the command \emph{os.wait ()}. Thus, the situation of orphan situation was avoided.\newline\bigbreak
+ \begin{figure}[h]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=.8\textwidth]{childproc.png} % first figure itself
+        \caption{Create child process}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{wait.png} % first figure itself
+        \caption{Wait command}
+    \end{minipage}\hfill
+    
+\end{figure}
+\bigbreak
+--In this section, we need to examine the fork process so that we can better understand the child process. \emph{os.fork()} creates two processes: A parent process and a child
+process.This is the copy of the child process parent that occurs. In figure 3, after running our script , we have seen that separate "PIDs" are created for child and parent.\bigbreak
+
+        \begin{figure}[h]
+                \centering
+                \includegraphics[width=.6\textwidth]{output1.png} % first figure itself
+                \caption{Child and parent process}
+        \end{figure}
+
+       \emph{----  Our output showed that our fork command was working successfully. ----}
+
+\bigbreak
+
+
+In our homework, we were asked to examine the duplicate status of the files we downloaded. For this task we used the function in figure 4 
+ \begin{figure}[h]
+                \centering
+                \includegraphics[width=.52\textwidth]{duplicate.png} % first figure itself
+                \caption{Duplicate function}
+        \end{figure}
+
+-- We tried 2 ways to run this function. First of all, we called in the normal way, once for each element, second we tried the multiprocessing way.
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+
+
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.99\textwidth]{normal.png} % first figure itself
+        \caption{Normal implementation}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=1.37\textwidth]{pool.png} % second figure itself
+        \caption{Multiprocessing implementation}
+    \end{minipage}
+\end{figure}
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+
+-- After running these methods, we checked the running times with the time command. Our expectation was to see a certain difference in duration between the two ways. But they worked very close to each other in terms of time. Because of this situation, we could not decide which way is more reasonable to use.
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{first.jpg} % first figure itself
+        \caption{Multiprocessing time}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{second.jpg} % first figure itself
+        \caption{Normal way time}
+    \end{minipage}\hfill
+    \bigbreak\bigbreak
+    \emph{---- The times are very close to each other as seen in figures 7 and 8}
+\end{figure}
+\bigbreak
+\bigbreak
+
+
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+
+\section{Conclusion}
+As a result, we tried to see how the child process is created and the advantages of using multiprocessing while performing the tasks given in this assignment. When we create a child process as in figure 1, our parent process first worked and finished. This is undesirable because our child process we have created is now out of our control. In order to solve this situation, we forced our parent process to wait for the child process.\newline 
+After downloading the files, we had to work on it. We used the multiprocessing method, which we think would be advantageous for these operations. But we couldn't provide the advantage we expected with multiprocessing. In this case, the most important question to be asked is this. What could be the reason for this? The purpose of using multiprocessing is to get the jobs that require a lot of processor load by using all the possibilities of the processor. So we can do a big job faster by dividing it into multiple processes. In this case, we think that the task we want to do is a low cost task and it happens very quickly. As evidence for this, we can show the output times in Figures 7 and 8. Maybe that's why we couldn't see the difference in the way we wanted. To summarize, I think that as a result of the tests I did at the end of this assignment, large workloads are required to see the difference of multiprocess.
+\bigbreak
+\bigbreak
+\bigbreak
+\bigbreak
+\textbf{\spacecaps{Github Account:}}\bigbreak
+
+\textbf{\author{https://github.com/ayhanyuksek\\}}
+
+
+
+
+
+
+
+\end{document}
